@@ -37,4 +37,12 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @PostMapping("/sign-in")
+    public ResponseEntity<?> signIn(@RequestBody Login login) {
+        if (authService.login(login.getUsername(), login.getPassword())) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
 }
