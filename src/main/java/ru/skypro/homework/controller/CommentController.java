@@ -3,9 +3,9 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.Comments;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.impl.CommentServiceImpl;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/ads")
@@ -13,23 +13,22 @@ import java.util.List;
 public class CommentController {
     private final CommentServiceImpl commentServiceImpl;
 
-    @GetMapping("/{adId}/comments")
-    public List<Comment> getComments(@PathVariable int adId) {
-        return commentServiceImpl.getComments(adId);
+    @GetMapping("/{id}/comments")
+    public Comments getComments(@PathVariable int id) {
+        return new Comments();
     }
 
-    @PostMapping("/{adId}/comments")
-    public Comment addComment(@PathVariable int adId, @RequestBody Comment comment) {
-        return commentServiceImpl.addComment(adId, comment);
+    @PostMapping("/{id}/comments")
+    public CreateOrUpdateComment addComment(@PathVariable int id) {
+        return new CreateOrUpdateComment();
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
     public void deleteComment(@PathVariable int adId, @PathVariable int commentId) {
-        commentServiceImpl.deleteComment(adId, commentId);
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    public Comment patchComment(@PathVariable int adId, @PathVariable int commentId) {
-        return commentServiceImpl.patchComment(adId, commentId);
+    public CreateOrUpdateComment patchComment(@PathVariable int adId, @PathVariable int commentId) {
+        return new CreateOrUpdateComment();
     }
 }
