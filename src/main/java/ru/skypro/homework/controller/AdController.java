@@ -1,9 +1,6 @@
 package ru.skypro.homework.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ads;
@@ -12,8 +9,11 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdService;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 public class AdController {
@@ -24,53 +24,41 @@ public class AdController {
     }
 
     @GetMapping
-    public ResponseEntity<Ads> getAllAds() {
-        List<Ad> ads = adService.getAllAdvertisement();
-        Ads adsResponse = new Ads(ads.size(), ads);
-        return ResponseEntity.ok(adsResponse);
+    public Ads getAllAds() {
+        List<Ad> ads = new ArrayList<>();
+        return new Ads(ads);
     }
 
-    @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<Ad> createAdd(@RequestPart("properties") CreateOrUpdateAd properties,
-                                        @RequestPart("image") MultipartFile image) {
-
-        Ad newAd = adService.createAdvertisement(properties, image);
-
-        return ResponseEntity.status(201).body(newAd);
-    }
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Ad createAdd(@Valid @RequestPart("properties") CreateOrUpdateAd properties,
+                        @RequestPart("image") MultipartFile image) {
+        return null;
+    } //один из вариантов
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAd> getAdById(@PathVariable("id") Integer id) {
-        ExtendedAd ad = adService.getAdvertisementById(id);
-        return ResponseEntity.ok(ad);
+    public ExtendedAd getAdById(@PathVariable("id") Integer id) {
+        return new ExtendedAd();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAd(@PathVariable("id") Integer id) {
-        adService.deleteAdvertisement(id);
-        return ResponseEntity.noContent().build();
+    public void deleteAd(@PathVariable("id") Integer id) {
     }
 
+
     @PatchMapping("/{id}")
-    public ResponseEntity<Ad> updateAd(@PathVariable Integer id, @RequestBody CreateOrUpdateAd updatedAdvertisement) {
-        Ad ad = adService.updateAdvertisement(id, updatedAdvertisement);
-        return ResponseEntity.ok(ad);
+    public Ad updateAd(@PathVariable Integer id, @Valid @RequestBody CreateOrUpdateAd updatedAdvertisement) {
+        return new Ad();
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Ads> getAdsMe(@AuthenticationPrincipal User user) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        List<Ad> userAds = adService.getUserAds(username);
-        Ads adsResponse = new Ads(userAds.size(), userAds);
-        return ResponseEntity.ok(adsResponse);
+    public Ads getAdsMe() {
+        List<Ad> ads = new ArrayList<>();
+        return new Ads(ads);
     }
 
     @PatchMapping("/{id}/image")
-    public ResponseEntity<Void> updateAdImage(@PathVariable Integer id,
-                                              @RequestParam("image") MultipartFile file) {
-        adService.updateImage(id, file);
-        return ResponseEntity.ok().build();
+    public MultipartFile updateAdImage(@PathVariable Integer id,
+                                       @RequestPart("image") MultipartFile image) {
+        return image;
     }
 }

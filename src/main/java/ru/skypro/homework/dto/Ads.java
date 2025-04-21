@@ -1,16 +1,20 @@
 package ru.skypro.homework.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class Ads {
     private Integer count;
     private List<Ad> results;
 
-    public Ads(Integer count, List<Ad> results) {
-        this.count = count;
+    public Ads(List<Ad> results) {
+        this.count = results.size();
         this.results = results;
     }
 }

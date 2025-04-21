@@ -18,7 +18,7 @@ public class BasicAuthCorsFilter extends OncePerRequestFilter {
                                     HttpServletResponse httpServletResponse,
                                     FilterChain filterChain)
             throws ServletException, IOException {
-        httpServletResponse.addHeader("Access-Control-Allow-Credentials", "true");
+        httpServletResponse.addHeader("Access-Control-Allow-Credentials", "http://localhost:3000");
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }
