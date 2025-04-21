@@ -1,4 +1,4 @@
-package ru.skypro.homework.model;
+package ru.skypro.homework.dto;
 
 import lombok.Data;
 import ru.skypro.homework.dto.Role;
@@ -20,4 +20,5 @@ public class User {
             message = "Номер телефона должен соответствовать формату: +7 XXX XXX-XX-XX")
     private String phone;
     private Role role;
+    private String image;
 }
