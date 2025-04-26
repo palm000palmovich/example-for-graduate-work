@@ -21,4 +21,8 @@ public class CreateOrUpdateAd {
     @NotBlank(message = "Описание объявления")
     @Size(min = 8, max = 64, message = "От 8 до 64 символов")
     private String description;
+
+    public void checkLombock(){
+        
+    }
 }
