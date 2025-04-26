@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Ad {
+public class AdDto {
     private Integer author;
     private String image;
     private Long pk;

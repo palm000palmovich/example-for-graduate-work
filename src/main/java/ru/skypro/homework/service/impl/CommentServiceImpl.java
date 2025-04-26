@@ -4,28 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Collections;
 
 @Service
 public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
-
-    @Autowired
-    private AdRepository adRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -40,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public CommentsDTO getComments(Long adId) {
-        Ad ad = adRepository.findById(adId)
+        AdDto ad = adRepository.findById(adId)
                 .orElseThrow(() -> new EntityNotFoundException("Объявление с ID " + adId + " не найдено"));
 
         List<Comment> comments = commentRepository.findByAd(ad);
@@ -59,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public CreateOrUpdateComment addComment(Long adId, CreateOrUpdateComment createOrUpdateComment) {
-        Ad ad = adRepository.findById(adId)
+        AdDto ad = adRepository.findById(adId)
                 .orElseThrow(() -> new EntityNotFoundException("Объявление с ID " + adId + " не найдено"));
 
         Comment comment = commentMapper.toComment(createOrUpdateComment);

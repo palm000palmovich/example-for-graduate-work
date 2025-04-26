@@ -9,4 +9,3 @@ CREATE TABLE comments
     author VARCHAR(255),
     createdAt TIMESTAMP(6)
 );
-

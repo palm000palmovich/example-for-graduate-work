@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -32,7 +31,7 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "ad_id")
     @JsonBackReference
-    private Ad ad;
+    private AdDto ad;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
