@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
@@ -12,6 +13,7 @@ import ru.skypro.homework.service.impl.UserServiceImpl;
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
 @RequestMapping("/users")
+@Validated
 public class UserController {
     private final UserServiceImpl userService;
 
@@ -22,7 +24,6 @@ public class UserController {
 
     @PostMapping("/set_password")
     public NewPassword setPassword(@RequestBody NewPassword newPassword) {
-
         userService.setPassword(newPassword);
         return newPassword;
     }

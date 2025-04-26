@@ -1,10 +1,7 @@
 package ru.skypro.homework.dto;
 
 import lombok.Data;
-import ru.skypro.homework.dto.Role;
 
-import javax.persistence.*;
-import java.util.UUID;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 

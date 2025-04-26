@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
@@ -16,6 +17,7 @@ import java.util.List;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
+@Validated
 public class AdController {
     private final AdServiceImpl adService;
 
