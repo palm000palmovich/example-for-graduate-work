@@ -1,13 +1,11 @@
 package ru.skypro.homework.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.impl.UserServiceImpl;
 
 @RestController
@@ -29,8 +27,8 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public User getInfoAboutCurrentUser(@PathVariable Long id) {
-        return new User();
+    public UserDto getInfoAboutCurrentUser(@PathVariable Long id) {
+        return new UserDto();
     }
 
     @PatchMapping("/me")

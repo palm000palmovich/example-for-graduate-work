@@ -14,17 +14,17 @@ public interface CommentMapper {
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
     @Mapping(source = "id", target = "pk")
-    @Mapping(source = "comment.author.authorId", target = "author")
-    @Mapping(source = "comment.author.authorImage", target = "authorImage")
-    @Mapping(source = "comment.author.authorFirstName", target = "authorFirstName")
+    @Mapping(source = "comment.author.id", target = "author")
+    @Mapping(source = "comment.author.image", target = "authorImage")
+    @Mapping(source = "comment.author.firstName", target = "authorFirstName")
     @Mapping(target = "createdAt", expression = "java(comment.getCreatedAt().toEpochMilli())")
     CommentDTO toCommentDTO(Comment comment);
-
 
     default CommentsDTO toCommentsDTO(List<Comment> comments) {
         CommentsDTO commentsDTO = new CommentsDTO();
         commentsDTO.setCount(comments.size());
-        commentsDTO.setResults(comments.stream().map(this::toCommentDTO).toList());
+        commentsDTO.setResults(comments.stream()
+                .map(this::toCommentDTO).toList());
         return commentsDTO;
     }
 

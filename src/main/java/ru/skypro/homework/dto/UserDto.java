@@ -1,18 +1,19 @@
 package ru.skypro.homework.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-
 @Data
-public class User {
-    private Long id;
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserDto {
+    private Integer id;
     @Size(min = 4, max = 16, message = "От 4 до 16 символов")
-    private String username;
-    @Size(min = 8, max = 16, message = "От 8 до 16 символов")
-    private String password;
+    private String email;
     @Size(min = 3, max = 16, message = "От 3 до 16 символов")
     private String firstName;
     @Size(min = 3, max = 16, message = "От 3 до 16 символов")

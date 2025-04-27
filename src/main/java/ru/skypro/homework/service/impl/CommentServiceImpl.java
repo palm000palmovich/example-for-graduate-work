@@ -7,9 +7,12 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mapper.CommentMapper;
+import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
@@ -23,6 +26,8 @@ public class CommentServiceImpl implements CommentService {
     private CommentRepository commentRepository;
 
     @Autowired
+    private AdRepository adRepository;
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -34,11 +39,11 @@ public class CommentServiceImpl implements CommentService {
      * @param adId
      */
     @Override
-    public CommentsDTO getComments(Long adId) {
-        AdDto ad = adRepository.findById(adId)
-                .orElseThrow(() -> new EntityNotFoundException("Объявление с ID " + adId + " не найдено"));
+    public CommentsDTO getComments(Integer adId) {
+        Ad adById = adRepository.findById(adId).orElseThrow(() ->
+                new EntityNotFoundException("Объявление с ID " + adId + " не найдено"));
 
-        List<Comment> comments = commentRepository.findByAd(ad);
+        List<Comment> comments = commentRepository.findByAdId(adById.getId());
 
         return commentMapper.toCommentsDTO(comments);
     }
@@ -53,8 +58,8 @@ public class CommentServiceImpl implements CommentService {
      * @param adId
      */
     @Override
-    public CreateOrUpdateComment addComment(Long adId, CreateOrUpdateComment createOrUpdateComment) {
-        AdDto ad = adRepository.findById(adId)
+    public CreateOrUpdateComment addComment(Integer adId, CreateOrUpdateComment createOrUpdateComment) {
+        Ad ad = adRepository.findById(adId)
                 .orElseThrow(() -> new EntityNotFoundException("Объявление с ID " + adId + " не найдено"));
 
         Comment comment = commentMapper.toComment(createOrUpdateComment);
@@ -73,7 +78,7 @@ public class CommentServiceImpl implements CommentService {
      * @param commentId
      */
     @Override
-    public void deleteComment(Long adId, Long commentId) {
+    public void deleteComment(Integer adId, Integer commentId) {
         adRepository.findById(adId)
                 .orElseThrow(() -> new EntityNotFoundException("Объявление с ID " + adId + " не найдено"));
 
@@ -92,7 +97,7 @@ public class CommentServiceImpl implements CommentService {
      * @return
      */
     @Override
-    public CreateOrUpdateComment updateComment(Long adId, Long commentId, CreateOrUpdateComment createOrUpdateComment) {
+    public CreateOrUpdateComment updateComment(Integer adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment) {
         adRepository.findById(adId)
                 .orElseThrow(() -> new EntityNotFoundException("Объявление с ID " + adId + " не найдено"));
 
@@ -111,10 +116,10 @@ public class CommentServiceImpl implements CommentService {
      */
         private User getCurrentUser() {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь с логином " + username + " не найден"));
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            return userRepository.findByUsername(username)
+                    .orElse(null);
     }
 }
 

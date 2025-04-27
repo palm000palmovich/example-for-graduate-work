@@ -21,23 +21,23 @@ public class CommentController {
     }
 
     @GetMapping("/{id}/comments")
-    public CommentsDTO getComments(@PathVariable Long id) {
+    public CommentsDTO getComments(@PathVariable Integer id) {
         return commentService.getComments(id);
     }
 
     @PostMapping("/{id}/comments")
-    public CreateOrUpdateComment addComment(@PathVariable Long id,
+    public CreateOrUpdateComment addComment(@PathVariable Integer id,
                                             @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         return commentService.addComment(id, createOrUpdateComment);
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public void deleteComment(@PathVariable Long adId, @PathVariable Long commentId) {
+    public void deleteComment(@PathVariable Integer adId, @PathVariable Integer commentId) {
         commentService.deleteComment(adId, commentId);
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    public CreateOrUpdateComment patchComment(@PathVariable Long adId, @PathVariable Long commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+    public CreateOrUpdateComment patchComment(@PathVariable Integer adId, @PathVariable Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         return commentService.updateComment(adId, commentId, createOrUpdateComment);
     }
 }

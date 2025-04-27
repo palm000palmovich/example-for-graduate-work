@@ -1,17 +1,19 @@
 package ru.skypro.homework.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
-@Entity
-@Table(name = "ads")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "ads")
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +28,11 @@ public class Ad {
     @Column(name = "image_path")
     private String image;
 
-//    @OneToMany(mappedBy = "ads")
-//    private Collection<Comment> commentsList;
+    @OneToMany(mappedBy = "ad")
+    private List<Comment> commentsList;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
+    @JsonBackReference
+    private User user;
 }
