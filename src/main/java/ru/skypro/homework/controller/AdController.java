@@ -1,10 +1,11 @@
 package ru.skypro.homework.controller;
 
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.impl.AdServiceImpl;
@@ -16,6 +17,7 @@ import java.util.List;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
+@Validated
 public class AdController {
     private final AdServiceImpl adService;
 
@@ -24,14 +26,14 @@ public class AdController {
     }
 
     @GetMapping
-    public Ads getAllAds() {
-        List<Ad> ads = new ArrayList<>();
-        return new Ads(ads);
+    public AdsDto getAllAds() {
+        List<AdDto> ads = new ArrayList<>();
+        return new AdsDto(ads);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Ad createAdd(@Valid @RequestPart("properties") CreateOrUpdateAd properties,
-                        @RequestPart("image") MultipartFile image) {
+    public AdDto createAdd(@Valid @RequestPart("properties") CreateOrUpdateAd properties,
+                           @RequestPart("image") MultipartFile image) {
         return null;
     } //один из вариантов
 
@@ -46,14 +48,14 @@ public class AdController {
 
 
     @PatchMapping("/{id}")
-    public Ad updateAd(@PathVariable Integer id, @Valid @RequestBody CreateOrUpdateAd updatedAdvertisement) {
-        return new Ad();
+    public AdDto updateAd(@PathVariable Integer id, @Valid @RequestBody CreateOrUpdateAd updatedAdvertisement) {
+        return new AdDto();
     }
 
     @GetMapping("/me")
-    public Ads getAdsMe() {
-        List<Ad> ads = new ArrayList<>();
-        return new Ads(ads);
+    public AdsDto getAdsMe() {
+        List<AdDto> ads = new ArrayList<>();
+        return new AdsDto(ads);
     }
 
     @PatchMapping("/{id}/image")
