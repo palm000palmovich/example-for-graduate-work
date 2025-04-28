@@ -36,6 +36,7 @@ public class WebSecurityConfig {
         return new InMemoryUserDetailsManager(user);
     }
 
+    //!!!filterChain чекает, какие эндпоинты требуют auth(), капитан безопасности
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()
@@ -44,7 +45,7 @@ public class WebSecurityConfig {
                         authorization ->
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
-                                        .permitAll()
+                                        .permitAll()   //разрешить без auth
                                         .mvcMatchers("/ads/**", "/users/**")
                                         .authenticated())
                 .cors()

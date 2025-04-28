@@ -40,12 +40,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public CommentsDTO getComments(Integer adId) {
-        Ad adById = adRepository.findById(adId).orElseThrow(() ->
-                new EntityNotFoundException("Объявление с ID " + adId + " не найдено"));
-
-        List<Comment> comments = commentRepository.findByAdId(adById.getId());
-
-        return commentMapper.toCommentsDTO(comments);
+        return new CommentsDTO();
     }
 
 
