@@ -1,13 +1,9 @@
 package ru.skypro.homework.service.impl;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
@@ -22,16 +18,17 @@ import javax.persistence.EntityNotFoundException;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    @Autowired
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
+    private final AdRepository adRepository;
+    private final UserRepository userRepository;
+    private final CommentMapper commentMapper;
 
-    @Autowired
-    private AdRepository adRepository;
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CommentMapper commentMapper;
+    public CommentServiceImpl(CommentRepository commentRepository, AdRepository adRepository, UserRepository userRepository, CommentMapper commentMapper) {
+        this.commentRepository = commentRepository;
+        this.adRepository = adRepository;
+        this.userRepository = userRepository;
+        this.commentMapper = commentMapper;
+    }
 
     /** Получаем объявление по ID
      * Получаем все комментарии для объявления

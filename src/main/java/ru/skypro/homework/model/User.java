@@ -1,8 +1,4 @@
 package ru.skypro.homework.model;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
@@ -10,9 +6,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Table(name = "users")
 @Entity
 public class User {
@@ -53,6 +47,103 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Ad> ads;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "author")
     private List<Comment> comments;
+
+    public User() {
+
+    }
+
+    public User(List<Comment> comments, List<Ad> ads, String image, Role role, String phone, String lastName, String firstName, String password, String username, Integer id) {
+        this.comments = comments;
+        this.ads = ads;
+        this.image = image;
+        this.role = role;
+        this.phone = phone;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.password = password;
+        this.username = username;
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public List<Ad> getAds() {
+        return ads;
+    }
+
+    public void setAds(List<Ad> ads) {
+        this.ads = ads;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 }

@@ -13,8 +13,7 @@ import ru.skypro.homework.service.impl.CommentServiceImpl;
 @Validated
 public class CommentController {
 
-    @Autowired
-    private CommentServiceImpl commentService;
+    private final CommentServiceImpl commentService;
 
     public CommentController(CommentServiceImpl commentService) {
         this.commentService = commentService;

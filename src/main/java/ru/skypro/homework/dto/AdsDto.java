@@ -1,20 +1,34 @@
 package ru.skypro.homework.dto;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class AdsDto {
     private Integer count;
     private List<AdDto> results;
 
     public AdsDto(List<AdDto> results) {
         this.count = results.size();
+        this.results = results;
+    }
+
+    public AdsDto(Integer count, List<AdDto> results) {
+        this.count = count;
+        this.results = results;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public List<AdDto> getResults() {
+        return results;
+    }
+
+    public void setResults(List<AdDto> results) {
         this.results = results;
     }
 }
