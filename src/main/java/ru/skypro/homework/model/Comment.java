@@ -1,19 +1,12 @@
 package ru.skypro.homework.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.skypro.homework.dto.UserDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -42,5 +35,56 @@ public class Comment {
     @PrePersist
     protected void onCreate() {
         createdAt = Instant.now();
+    }
+
+    public Comment(Integer id, String text, Instant createdAt, Ad ad, User author) {
+        this.id = id;
+        this.text = text;
+        this.createdAt = createdAt;
+        this.ad = ad;
+        this.author = author;
+    }
+
+    public Comment() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public @NotNull(message = "Текст комментария не может быть пустым") @Size(min = 1, max = 500, message = "Текст комментария должен содержать от 1 до 500 символов") String getText() {
+        return text;
+    }
+
+    public void setText(@NotNull(message = "Текст комментария не может быть пустым") @Size(min = 1, max = 500, message = "Текст комментария должен содержать от 1 до 500 символов") String text) {
+        this.text = text;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Ad getAd() {
+        return ad;
+    }
+
+    public void setAd(Ad ad) {
+        this.ad = ad;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 }

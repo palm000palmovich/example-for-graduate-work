@@ -1,11 +1,7 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-
 import javax.validation.constraints.Size;
 
-@Data
 public class NewPassword {
     @Size(min = 8, max = 16, message = "От 8 до 16 символов")
     private String currentPassword;
@@ -16,6 +12,22 @@ public class NewPassword {
 
     public NewPassword(String currentPassword, String newPassword) {
         this.currentPassword = currentPassword;
+        this.newPassword = newPassword;
+    }
+
+    public @Size(min = 8, max = 16, message = "От 8 до 16 символов") String getCurrentPassword() {
+        return currentPassword;
+    }
+
+    public void setCurrentPassword(@Size(min = 8, max = 16, message = "От 8 до 16 символов") String currentPassword) {
+        this.currentPassword = currentPassword;
+    }
+
+    public @Size(min = 8, max = 16, message = "От 8 до 16 символов") String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(@Size(min = 8, max = 16, message = "От 8 до 16 символов") String newPassword) {
         this.newPassword = newPassword;
     }
 }

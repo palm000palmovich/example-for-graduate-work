@@ -1,6 +1,10 @@
 package ru.skypro.homework.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,17 +12,27 @@ import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.exception.AuthenticationException;
+import ru.skypro.homework.exception.EntityNotFoundException;
+import ru.skypro.homework.exception.ForbiddenAccesException;
+import ru.skypro.homework.exception.UnauthorizedAccesException;
+import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 @Validated
 public class AdController {
+
     private final AdServiceImpl adService;
 
     public AdController(AdServiceImpl adService) {
@@ -27,40 +41,57 @@ public class AdController {
 
     @GetMapping
     public AdsDto getAllAds() {
-        List<AdDto> ads = new ArrayList<>();
-        return new AdsDto(ads);
+        return adService.getAllAds();
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public AdDto createAdd(@Valid @RequestPart("properties") CreateOrUpdateAd properties,
-                           @RequestPart("image") MultipartFile image) {
-        return null;
-    } //один из вариантов
+    public ResponseEntity<Ad> createAdd(@Valid @RequestPart("properties") CreateOrUpdateAd properties,
+                                        @RequestPart("image") MultipartFile image) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(adService.createAdd(properties, image));
+    }
 
     @GetMapping("/{id}")
-    public ExtendedAd getAdById(@PathVariable("id") Integer id) {
-        return new ExtendedAd();
+    public ResponseEntity<?> getAdById(@PathVariable("id") Integer id) {
+        try {
+            ExtendedAd extendedAd = adService.getAddById(id);
+            return ResponseEntity.ok(extendedAd);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Ad not found"));
+        } catch (UnauthorizedAccesException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAd(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteAd(@PathVariable("id") Integer id) {
+        try {
+            adService.deleteAddById(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (UnauthorizedAccesException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (ForbiddenAccesException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 
 
     @PatchMapping("/{id}")
-    public AdDto updateAd(@PathVariable Integer id, @Valid @RequestBody CreateOrUpdateAd updatedAdvertisement) {
-        return new AdDto();
+    public ResponseEntity<AdDto> updateAd(@PathVariable Integer id,
+                                          @Valid @RequestBody CreateOrUpdateAd updatedAdvertisement) {
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/me")
-    public AdsDto getAdsMe() {
-        List<AdDto> ads = new ArrayList<>();
-        return new AdsDto(ads);
+    public ResponseEntity<AdsDto> getAdsMe() {
+        return ResponseEntity.status(HttpStatus.OK).body(adService.getAdsUsers());
     }
 
-    @PatchMapping("/{id}/image")
-    public MultipartFile updateAdImage(@PathVariable Integer id,
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateAdImage(@PathVariable Integer id,
                                        @RequestPart("image") MultipartFile image) {
-        return image;
+        adService.updateAdImageById(id, image);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
