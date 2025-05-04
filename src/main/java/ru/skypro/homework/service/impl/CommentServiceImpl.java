@@ -1,120 +1,24 @@
 package ru.skypro.homework.service.impl;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.AdDto;
-import ru.skypro.homework.dto.CommentsDTO;
-import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.mapper.CommentMapper;
-import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.CommentService;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
-public class CommentServiceImpl implements CommentService {
+public class CommentServiceImpl{
+    private final CommentRepository commentRepository;
 
-    @Autowired
-    private CommentRepository commentRepository;
+    private final AdRepository adRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private AdRepository adRepository;
-    @Autowired
-    private UserRepository userRepository;
+    //private final CommentMapper commentMapper;
 
-    @Autowired
-    private CommentMapper commentMapper;
-
-    /** Получаем объявление по ID
-     * Получаем все комментарии для объявления
-     * Преобразуем в DTO
-     * @param adId
-     */
-    @Override
-    public CommentsDTO getComments(Integer adId) {
-        return new CommentsDTO();
+    public CommentServiceImpl(CommentRepository commentRepository, AdRepository adRepository, UserRepository userRepository) {
+        this.commentRepository = commentRepository;
+        this.adRepository = adRepository;
+        this.userRepository = userRepository;
+//        this.commentMapper = commentMapper;
     }
 
-
-    /** Получаем объявление по ID
-     * Создаем новый комментарий
-     * Преобразуем в DTO
-     * Вручную устанавливаем комментарию объявление, автора.
-     * Предполагается, что текущий пользователь доступен через SecurityContext.
-     * Сохраняем комментарий. Возвращаем DTO нового комментария
-     * @param adId
-     */
-    @Override
-    public CreateOrUpdateComment addComment(Integer adId, CreateOrUpdateComment createOrUpdateComment) {
-        Ad ad = adRepository.findById(adId)
-                .orElseThrow(() -> new EntityNotFoundException("Объявление с ID " + adId + " не найдено"));
-
-        Comment comment = commentMapper.toComment(createOrUpdateComment);
-        comment.setAd(ad);
-        comment.setAuthor(getCurrentUser());
-
-        Comment savedComment = commentRepository.save(comment);
-
-        return commentMapper.toCreateOrUpdateComment(savedComment);
-    }
-
-
-    /** Проверяем, существует ли объявление
-     * Удаляем комментарий
-     * @param adId
-     * @param commentId
-     */
-    @Override
-    public void deleteComment(Integer adId, Integer commentId) {
-        adRepository.findById(adId)
-                .orElseThrow(() -> new EntityNotFoundException("Объявление с ID " + adId + " не найдено"));
-
-        commentRepository.deleteById(commentId);
-    }
-
-
-    /** Проверяем, существует ли объявление
-     * Получаем комментарий по ID
-     * Обновляем текст комментария
-     * Сохраняем обновленный комментарий
-     * Возвращаем DTO обновленного комментария
-     * @param adId
-     * @param commentId
-     * @param createOrUpdateComment
-     * @return
-     */
-    @Override
-    public CreateOrUpdateComment updateComment(Integer adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment) {
-        adRepository.findById(adId)
-                .orElseThrow(() -> new EntityNotFoundException("Объявление с ID " + adId + " не найдено"));
-
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException("Комментарий с ID " + commentId + " не найден"));
-
-        comment.setText(createOrUpdateComment.getText());
-
-        Comment updatedComment = commentRepository.save(comment);
-
-        return commentMapper.toCreateOrUpdateComment(updatedComment);
-    }
-
-    /**
-     * Получаем текущего пользователя из SecurityContextHolder
-     */
-        private User getCurrentUser() {
-
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String username = authentication.getName();
-            return userRepository.findByUsername(username)
-                    .orElse(null);
-    }
 }
 

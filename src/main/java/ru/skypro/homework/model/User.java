@@ -1,8 +1,6 @@
 package ru.skypro.homework.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
@@ -10,9 +8,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "users")
 @Entity
 public class User {
@@ -22,19 +17,16 @@ public class User {
     private Integer id;
 
     @Column(nullable = false)
-    @Size(min = 4, max = 16, message = "От 4 до 16 символов")
+    @Size(min = 4, max = 27, message = "От 4 до 27 символов")
     private String username;
 
     @Column(nullable = false)
-    @Size(min = 8, max = 16, message = "От 8 до 16 символов")
     private String password;
 
     @Column(nullable = false)
-    @Size(min = 3, max = 16, message = "От 3 до 16 символов")
     private String firstName;
 
     @Column(nullable = false)
-    @Size(min = 3, max = 16, message = "От 3 до 16 символов")
     private String lastName;
 
     @Column(nullable = false)
@@ -46,13 +38,108 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    @Column(nullable = false)
     private String image;
-
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "author")
+    @JsonBackReference
     private List<Ad> ads;
 
     @OneToMany(mappedBy = "user")
+    @JsonBackReference
     private List<Comment> comments;
+
+    public User(Integer id, String username, String password, String firstName, String lastName,
+                String phone, Role role, String image, List<Ad> ads, List<Comment> comments) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.role = role;
+        this.image = image;
+        this.ads = ads;
+        this.comments = comments;
+    }
+
+    public User(){}
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public List<Ad> getAds() {
+        return ads;
+    }
+
+    public void setAds(List<Ad> ads) {
+        this.ads = ads;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 }
