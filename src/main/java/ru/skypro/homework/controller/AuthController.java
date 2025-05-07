@@ -18,7 +18,6 @@ import javax.validation.Valid;
 @RestController
 @Validated
 public class AuthController {
-    private Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
 
     public AuthController(AuthService authService) {
@@ -26,6 +25,9 @@ public class AuthController {
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
+        if (!authService.login(login)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.ok().build();
     }
 
