@@ -31,20 +31,19 @@ public class Ad {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     @JsonBackReference
-    private User user;
+    private User author;
 
-    public Ad(Integer id, String title, String description, int price, String image, List<Comment> commentsList, User user) {
+    public Ad(Integer id, String title, String description, int price, String image, List<Comment> commentsList, User author) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.price = price;
         this.image = image;
         this.commentsList = commentsList;
-        this.user = user;
+        this.author = author;
     }
 
-    public Ad() {
-    }
+    public Ad(){}
 
     public Integer getId() {
         return id;
@@ -54,11 +53,11 @@ public class Ad {
         this.id = id;
     }
 
-    public @Size(max = 23) String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(@Size(max = 23) String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -95,10 +94,10 @@ public class Ad {
     }
 
     public User getUser() {
-        return user;
+        return author;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(User author) {
+        this.author = author;
     }
 }

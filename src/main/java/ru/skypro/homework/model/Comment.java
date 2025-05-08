@@ -30,23 +30,22 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     @JsonBackReference
-    private User author;
+    private User user;
 
     @PrePersist
     protected void onCreate() {
         createdAt = Instant.now();
     }
 
-    public Comment(Integer id, String text, Instant createdAt, Ad ad, User author) {
+    public Comment(Integer id, String text, Instant createdAt, Ad ad, User user) {
         this.id = id;
         this.text = text;
         this.createdAt = createdAt;
         this.ad = ad;
-        this.author = author;
+        this.user = user;
     }
 
-    public Comment() {
-    }
+    public Comment(){}
 
     public Integer getId() {
         return id;
@@ -56,11 +55,11 @@ public class Comment {
         this.id = id;
     }
 
-    public @NotNull(message = "Текст комментария не может быть пустым") @Size(min = 1, max = 500, message = "Текст комментария должен содержать от 1 до 500 символов") String getText() {
+    public String getText() {
         return text;
     }
 
-    public void setText(@NotNull(message = "Текст комментария не может быть пустым") @Size(min = 1, max = 500, message = "Текст комментария должен содержать от 1 до 500 символов") String text) {
+    public void setText(String text) {
         this.text = text;
     }
 
@@ -81,10 +80,10 @@ public class Comment {
     }
 
     public User getAuthor() {
-        return author;
+        return user;
     }
 
     public void setAuthor(User author) {
-        this.author = author;
+        this.user = author;
     }
 }

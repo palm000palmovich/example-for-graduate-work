@@ -27,9 +27,6 @@ public class UserDto {
         this.image = image;
     }
 
-    public UserDto() {
-    }
-
     public Integer getId() {
         return id;
     }
@@ -38,37 +35,35 @@ public class UserDto {
         this.id = id;
     }
 
-    public @Size(min = 4, max = 16, message = "От 4 до 16 символов") String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(@Size(min = 4, max = 16, message = "От 4 до 16 символов") String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public @Size(min = 3, max = 16, message = "От 3 до 16 символов") String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(@Size(min = 3, max = 16, message = "От 3 до 16 символов") String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public @Size(min = 3, max = 16, message = "От 3 до 16 символов") String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(@Size(min = 3, max = 16, message = "От 3 до 16 символов") String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}",
-            message = "Номер телефона должен соответствовать формату: +7 XXX XXX-XX-XX") String getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(@Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}",
-            message = "Номер телефона должен соответствовать формату: +7 XXX XXX-XX-XX") String phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

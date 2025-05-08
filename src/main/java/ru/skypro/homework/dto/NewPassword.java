@@ -15,19 +15,27 @@ public class NewPassword {
         this.newPassword = newPassword;
     }
 
-    public @Size(min = 8, max = 16, message = "От 8 до 16 символов") String getCurrentPassword() {
+    public String getCurrentPassword() {
         return currentPassword;
     }
 
-    public void setCurrentPassword(@Size(min = 8, max = 16, message = "От 8 до 16 символов") String currentPassword) {
+    public void setCurrentPassword(String currentPassword) {
         this.currentPassword = currentPassword;
     }
 
-    public @Size(min = 8, max = 16, message = "От 8 до 16 символов") String getNewPassword() {
+    public String getNewPassword() {
         return newPassword;
     }
 
-    public void setNewPassword(@Size(min = 8, max = 16, message = "От 8 до 16 символов") String newPassword) {
+    public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    @Override
+    public String toString() {
+        return "NewPassword{" +
+                "currentPassword='" + currentPassword + '\'' +
+                ", newPassword='" + newPassword + '\'' +
+                '}';
     }
 }

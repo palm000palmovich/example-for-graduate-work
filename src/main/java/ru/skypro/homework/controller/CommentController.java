@@ -13,31 +13,10 @@ import ru.skypro.homework.service.impl.CommentServiceImpl;
 @Validated
 public class CommentController {
 
-    @Autowired
-    private CommentServiceImpl commentService;
+    private final CommentServiceImpl commentService;
 
     public CommentController(CommentServiceImpl commentService) {
         this.commentService = commentService;
     }
 
-    @GetMapping("/{id}/comments")
-    public CommentsDTO getComments(@PathVariable Integer id) {
-        return commentService.getComments(id);
-    }
-
-    @PostMapping("/{id}/comments")
-    public CreateOrUpdateComment addComment(@PathVariable Integer id,
-                                            @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return commentService.addComment(id, createOrUpdateComment);
-    }
-
-    @DeleteMapping("/{adId}/comments/{commentId}")
-    public void deleteComment(@PathVariable Integer adId, @PathVariable Integer commentId) {
-        commentService.deleteComment(adId, commentId);
-    }
-
-    @PatchMapping("/{adId}/comments/{commentId}")
-    public CreateOrUpdateComment patchComment(@PathVariable Integer adId, @PathVariable Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return commentService.updateComment(adId, commentId, createOrUpdateComment);
-    }
 }

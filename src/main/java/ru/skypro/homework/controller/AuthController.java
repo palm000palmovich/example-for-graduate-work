@@ -1,7 +1,5 @@
 package ru.skypro.homework.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,26 +13,26 @@ import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 import org.slf4j.Logger;
 
-@CrossOrigin(value = "http://localhost:3000")
+import javax.validation.Valid;
+
 @RestController
-@RequiredArgsConstructor
 @Validated
 public class AuthController {
-    private Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
 
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
-        if (authService.login(login.getUsername(), login.getPassword())) {
-            logger.info("Log in by login: " + login.getUsername() + " password: " + login.getPassword());
-            return ResponseEntity.ok().build();
-        } else {
+        if (!authService.login(login)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Register register) {
+    public ResponseEntity<?> register(@Valid @RequestBody Register register) {
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {

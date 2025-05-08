@@ -4,13 +4,10 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class Register {
-    @Size(min = 4, max = 16, message = "От 4 до 16 символов")
+    @Size(min = 4, max = 27, message = "От 4 до 27 символов")
     private String username;
-    @Size(min = 8, max = 16, message = "От 8 до 16 символов")
     private String password;
-    @Size(min = 3, max = 16, message = "От 3 до 16 символов")
     private String firstName;
-    @Size(min = 3, max = 16, message = "От 3 до 16 символов")
     private String lastName;
     @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}",
             message = "Номер телефона должен соответствовать формату: +7 XXX XXX-XX-XX")
@@ -26,48 +23,45 @@ public class Register {
         this.role = role;
     }
 
-    public Register() {
-    }
+    public Register(){}
 
-    public @Size(min = 4, max = 16, message = "От 4 до 16 символов") String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(@Size(min = 4, max = 16, message = "От 4 до 16 символов") String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public @Size(min = 8, max = 16, message = "От 8 до 16 символов") String getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(@Size(min = 8, max = 16, message = "От 8 до 16 символов") String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public @Size(min = 3, max = 16, message = "От 3 до 16 символов") String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(@Size(min = 3, max = 16, message = "От 3 до 16 символов") String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public @Size(min = 3, max = 16, message = "От 3 до 16 символов") String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(@Size(min = 3, max = 16, message = "От 3 до 16 символов") String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}",
-            message = "Номер телефона должен соответствовать формату: +7 XXX XXX-XX-XX") String getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(@Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}",
-            message = "Номер телефона должен соответствовать формату: +7 XXX XXX-XX-XX") String phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
