@@ -7,10 +7,12 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.Ad;
 
+import java.io.IOException;
+
 public interface AdService {
     AdsDto getAllAds();
 
-    Ad createAdd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image);
+    Ad createAdd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image) throws IOException;
 
     ExtendedAd getAddById(Integer id);
 
@@ -20,5 +22,4 @@ public interface AdService {
 
     AdsDto getAdsUsers();
 
-    void updateAdImageById(Integer id, MultipartFile image);
 }

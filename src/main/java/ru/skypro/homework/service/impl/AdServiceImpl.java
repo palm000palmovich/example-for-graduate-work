@@ -1,6 +1,6 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.access.AccessDeniedException;
+import org.slf4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,15 @@ import ru.skypro.homework.exception.ForbiddenAccesException;
 import ru.skypro.homework.exception.UnauthorizedAccesException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.AdImage;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -29,13 +32,14 @@ public class AdServiceImpl implements AdService {
     private final AdMapper adMapper;
     private final UserRepository userRepository;
     private final FileStorageService fileStorageService;
+    private final ImageRepository imageRepository;
 
-
-    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper, UserRepository userRepository, FileStorageService fileStorageService) {
+    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper, UserRepository userRepository, FileStorageService fileStorageService, ImageRepository imageRepository) {
         this.adRepository = adRepository;
         this.adMapper = adMapper;
         this.userRepository = userRepository;
         this.fileStorageService = fileStorageService;
+        this.imageRepository = imageRepository;
     }
 
     @Override
@@ -43,19 +47,18 @@ public class AdServiceImpl implements AdService {
         return adMapper.toAdsDto(adRepository.findAll());
     }
 
-    @Transactional
     @Override
-    public Ad createAdd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image) {
+    public Ad createAdd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image) throws IOException {
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow();
 
         Ad ad = adMapper.toAd(createOrUpdateAd);
         ad.setUser(user);
+        adRepository.save(ad);
 
         if (image != null && !image.isEmpty()) {
-            String fileName = fileStorageService.saveAdImage(image);
-            ad.setImage(fileName);
+            fileStorageService.uploadImage(ad.getId(), image);
         }
-        return adRepository.save(ad);
+        return ad;
     }
 
     @Override
@@ -103,23 +106,6 @@ public class AdServiceImpl implements AdService {
         return adMapper.toAdsDto(ads);
     }
 
-
-    @Override
-    public void updateAdImageById(Integer id, MultipartFile image) {
-        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        Ad ad = adRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
-
-        User user = userRepository.findByUsername(currentUsername).orElseThrow(() -> new UnauthorizedAccesException());
-
-        if (!ad.getUser().equals(user)) {
-            throw new ForbiddenAccesException();
-        }
-        String imageName = fileStorageService.saveAdImage(image);
-        ad.setImage(imageName);
-        adRepository.save(ad);
-    }
-
     private boolean isUserAuthorized(User user) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null && authentication.getName().equals(user.getUsername());
@@ -142,5 +128,4 @@ public class AdServiceImpl implements AdService {
         String username = authentication.getName();
         return ad.getUser() != null && username.equals(ad.getUser().getUsername());
     }
-
 }

@@ -34,6 +34,19 @@ CREATE TABLE comments
     author_id  INTEGER      NOT NULL REFERENCES users (id) ON DELETE CASCADE
 );
 
+-- changeset DenisTopakov: 2
+CREATE TABLE ad_data
+(
+    id        SERIAL PRIMARY KEY,
+    file_path VARCHAR(255),
+    file_size BIGINT NOT NULL,
+    mediatype VARCHAR(255),
+    data      BYTEA,
+    ad_id     INTEGER,
+    CONSTRAINT fk_ad_data_ads FOREIGN KEY (ad_id) REFERENCES ads (id)
+);
+
+
 
 
 

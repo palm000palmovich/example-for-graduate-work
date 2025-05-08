@@ -3,11 +3,11 @@ package ru.skypro.homework.dto;
 public class AdDto {
     private Integer author;
     private String image;
-    private Long pk;
+    private Integer pk;
     private Integer price;
     private String title;
 
-    public AdDto(Integer author, String image, Long pk, Integer price, String title) {
+    public AdDto(Integer author, String image, Integer pk, Integer price, String title) {
         this.author = author;
         this.image = image;
         this.pk = pk;
@@ -34,11 +34,11 @@ public class AdDto {
         this.image = image;
     }
 
-    public Long getPk() {
+    public Integer getPk() {
         return pk;
     }
 
-    public void setPk(Long pk) {
+    public void setPk(Integer pk) {
         this.pk = pk;
     }
 

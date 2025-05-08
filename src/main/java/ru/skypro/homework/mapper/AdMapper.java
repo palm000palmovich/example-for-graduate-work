@@ -8,14 +8,25 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.Ad;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AdMapper {
 
-    @Mapping(source = "id", target = "pk")
-    @Mapping(source = "user.id", target = "author")
-    AdDto toAdDto(Ad ad);
+//    @Mapping(source = "id", target = "pk")
+//    @Mapping(source = "user.id", target = "author")
+    default AdDto toAdDto(Ad ad){
+        AdDto adDto = new AdDto();
+        adDto.setPk(ad.getId());
+        adDto.setTitle(ad.getTitle());
+        adDto.setAuthor(ad.getUser().getId());
+        adDto.setPrice(ad.getPrice());
+        if (ad.getImage() != null) {
+            adDto.setImage(ad.getImage());
+        }
+        return adDto;
+    }
 
     default AdsDto toAdsDto(List<Ad> ads) {
         AdsDto adsDto = new AdsDto();

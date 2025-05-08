@@ -23,7 +23,6 @@ public class Ad {
     @Column(name = "price")
     private int price;
 
-    @Column(name = "image_path")
     private String image;
 
     @OneToMany(mappedBy = "ad")

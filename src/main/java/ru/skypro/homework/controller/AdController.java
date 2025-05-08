@@ -17,11 +17,17 @@ import ru.skypro.homework.exception.EntityNotFoundException;
 import ru.skypro.homework.exception.ForbiddenAccesException;
 import ru.skypro.homework.exception.UnauthorizedAccesException;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.AdImage;
 import ru.skypro.homework.model.User;
+import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.impl.AdServiceImpl;
+import ru.skypro.homework.service.impl.FileStorageService;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +40,13 @@ import java.util.logging.Logger;
 public class AdController {
 
     private final AdServiceImpl adService;
+    private final FileStorageService fileStorageService;
+    private final AdRepository adRepository;
 
-    public AdController(AdServiceImpl adService) {
+    public AdController(AdServiceImpl adService, FileStorageService fileStorageService, AdRepository adRepository) {
         this.adService = adService;
+        this.fileStorageService = fileStorageService;
+        this.adRepository = adRepository;
     }
 
     @GetMapping
@@ -47,11 +57,16 @@ public class AdController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Ad> createAdd(@Valid @RequestPart("properties") CreateOrUpdateAd properties,
                                         @RequestPart("image") MultipartFile image) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(adService.createAdd(properties, image));
+        try {
+            Ad ad = adService.createAdd(properties, image);
+            return ResponseEntity.status(HttpStatus.CREATED).body(ad);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAdById(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> getAdById(@PathVariable Integer id) {
         try {
             ExtendedAd extendedAd = adService.getAddById(id);
             return ResponseEntity.ok(extendedAd);
@@ -63,7 +78,7 @@ public class AdController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAd(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteAd(@PathVariable Integer id) {
         try {
             adService.deleteAddById(id);
             return ResponseEntity.noContent().build();
@@ -80,6 +95,12 @@ public class AdController {
     @PatchMapping("/{id}")
     public ResponseEntity<AdDto> updateAd(@PathVariable Integer id,
                                           @Valid @RequestBody CreateOrUpdateAd updatedAdvertisement) {
+        Ad ad = adRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        ad.setTitle(updatedAdvertisement.getTitle());
+        ad.setDescription(updatedAdvertisement.getDescription());
+        ad.setPrice(updatedAdvertisement.getPrice());
+        adRepository.save(ad);
+
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -89,9 +110,9 @@ public class AdController {
     }
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateAdImage(@PathVariable Integer id,
-                                       @RequestPart("image") MultipartFile image) {
-        adService.updateAdImageById(id, image);
+    public ResponseEntity<?> updateAdImage(@PathVariable Integer id,
+                                           @RequestPart("image") MultipartFile image) throws IOException {
+        fileStorageService.uploadImage(id, image);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
