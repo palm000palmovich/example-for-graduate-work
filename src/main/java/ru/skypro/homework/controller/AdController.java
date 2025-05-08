@@ -22,7 +22,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Map;
 
-@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 @Validated

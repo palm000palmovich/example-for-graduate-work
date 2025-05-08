@@ -43,11 +43,11 @@ public class User {
     private Role role;
 
     private String image;
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "user")
     @JsonBackReference
     private List<Ad> ads;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "user")
     @JsonBackReference
     private List<Comment> comments;
 

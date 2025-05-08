@@ -13,6 +13,7 @@ import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.ImageRepository;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Service
@@ -36,15 +37,15 @@ public class FileStorageService {
 
         imageRepository.findByAdId(adId).ifPresent(imageRepository::delete);
         Path imagePath = Path.of(avatarsDir, adId + "_" + file.getOriginalFilename());
-//        Files.createDirectories(imagePath.getParent());
-//        Files.deleteIfExists(imagePath);
-//
-//        try (InputStream inputStream = file.getInputStream();
-//             OutputStream outputStream = Files.newOutputStream(imagePath);
-//             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-//             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream)) {
-//            bufferedInputStream.transferTo(bufferedOutputStream);
-//        }
+        Files.createDirectories(imagePath.getParent());
+        Files.deleteIfExists(imagePath);
+
+        try (InputStream inputStream = file.getInputStream();
+             OutputStream outputStream = Files.newOutputStream(imagePath);
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream)) {
+            bufferedInputStream.transferTo(bufferedOutputStream);
+        }
 
         AdImage adImage = new AdImage();
         adImage.setFilePath(imagePath.toString());

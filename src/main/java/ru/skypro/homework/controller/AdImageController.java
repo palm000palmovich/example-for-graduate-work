@@ -12,7 +12,7 @@ import ru.skypro.homework.model.AdImage;
 import ru.skypro.homework.service.impl.FileStorageService;
 
 @RestController
-@RequestMapping(path = "/images")
+@RequestMapping(path = "/ads")
 public class AdImageController {
     private final FileStorageService fileStorageService;
 
@@ -20,7 +20,7 @@ public class AdImageController {
         this.fileStorageService = fileStorageService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/images")
     public ResponseEntity<byte[]> getImage(@PathVariable Integer id) {
         try {
             byte[] imageData = fileStorageService.getImageData(id);
