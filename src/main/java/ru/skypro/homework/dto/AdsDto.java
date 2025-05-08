@@ -11,9 +11,7 @@ public class AdsDto {
         this.results = results;
     }
 
-    public AdsDto(Integer count, List<AdDto> results) {
-        this.count = count;
-        this.results = results;
+    public AdsDto() {
     }
 
     public Integer getCount() {

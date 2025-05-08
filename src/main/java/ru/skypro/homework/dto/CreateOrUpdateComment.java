@@ -8,6 +8,9 @@ public class CreateOrUpdateComment {
         this.text = text;
     }
 
+    public CreateOrUpdateComment() {
+    }
+
     public String getText() {
         return text;
     }

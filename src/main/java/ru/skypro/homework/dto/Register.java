@@ -4,7 +4,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class Register {
-    @Size(min = 4, max = 16, message = "От 4 до 16 символов")
+    @Size(min = 4, max = 27, message = "От 4 до 27 символов")
     private String username;
     @Size(min = 8, max = 16, message = "От 8 до 16 символов")
     private String password;
@@ -25,6 +25,8 @@ public class Register {
         this.phone = phone;
         this.role = role;
     }
+
+    public Register(){}
 
     public String getUsername() {
         return username;

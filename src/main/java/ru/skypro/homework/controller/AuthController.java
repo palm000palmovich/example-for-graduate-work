@@ -13,7 +13,8 @@ import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 import org.slf4j.Logger;
 
-@CrossOrigin(value = "http://localhost:3000")
+import javax.validation.Valid;
+
 @RestController
 @Validated
 public class AuthController {
@@ -26,16 +27,14 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
-        if (authService.login(login.getUsername(), login.getPassword())) {
-            logger.info("Log in by login: " + login.getUsername() + " password: " + login.getPassword());
-            return ResponseEntity.ok().build();
-        } else {
+        if (!authService.login(login)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Register register) {
+    public ResponseEntity<?> register(@Valid @RequestBody Register register) {
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {

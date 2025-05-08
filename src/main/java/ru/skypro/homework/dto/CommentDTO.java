@@ -17,6 +17,9 @@ public class CommentDTO {
         this.text = text;
     }
 
+    public CommentDTO() {
+    }
+
     public Integer getAuthor() {
         return author;
     }

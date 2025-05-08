@@ -1,6 +1,7 @@
 package ru.skypro.homework.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -12,37 +13,38 @@ public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(name = "ad_title", nullable = false)
     @Size(max = 23)
     private String title;
+
     @Column(name = "ad_description")
     private String description;
+
     @Column(name = "price")
     private int price;
-    @Column(name = "image_path")
+
     private String image;
 
     @OneToMany(mappedBy = "ad")
     private List<Comment> commentsList;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
-    private User user;
+    private User author;
 
-    public Ad(Integer id, String title, String description, int price, String image, List<Comment> commentsList, User user) {
+    public Ad(Integer id, String title, String description, int price, String image, List<Comment> commentsList, User author) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.price = price;
         this.image = image;
         this.commentsList = commentsList;
-        this.user = user;
+        this.author = author;
     }
 
-    public Ad() {
-
-    }
+    public Ad(){}
 
     public Integer getId() {
         return id;
@@ -93,10 +95,10 @@ public class Ad {
     }
 
     public User getUser() {
-        return user;
+        return author;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(User author) {
+        this.author = author;
     }
 }

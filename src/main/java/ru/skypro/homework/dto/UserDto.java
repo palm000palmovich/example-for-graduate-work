@@ -27,9 +27,6 @@ public class UserDto {
         this.image = image;
     }
 
-    public UserDto() {
-    }
-
     public Integer getId() {
         return id;
     }

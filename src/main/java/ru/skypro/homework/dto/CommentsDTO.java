@@ -12,7 +12,6 @@ public class CommentsDTO {
     }
 
     public CommentsDTO() {
-
     }
 
     public int getCount() {

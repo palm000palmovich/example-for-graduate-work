@@ -1,7 +1,7 @@
 package ru.skypro.homework.dto;
 
 public class ExtendedAd {
-    private Long pk;
+    private Integer pk;
     private String authorFirstName;
     private String authorLastName;
     private String description;
@@ -11,7 +11,7 @@ public class ExtendedAd {
     private Integer price;
     private String title;
 
-    public ExtendedAd(Long pk, String authorFirstName, String authorLastName, String description, String email, String image, String phone, Integer price, String title) {
+    public ExtendedAd(Integer pk, String authorFirstName, String authorLastName, String description, String email, String image, String phone, Integer price, String title) {
         this.pk = pk;
         this.authorFirstName = authorFirstName;
         this.authorLastName = authorLastName;
@@ -24,14 +24,13 @@ public class ExtendedAd {
     }
 
     public ExtendedAd() {
-
     }
 
-    public Long getPk() {
+    public Integer getPk() {
         return pk;
     }
 
-    public void setPk(Long pk) {
+    public void setPk(Integer pk) {
         this.pk = pk;
     }
 

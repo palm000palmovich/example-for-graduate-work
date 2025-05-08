@@ -1,4 +1,6 @@
 package ru.skypro.homework.model;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
@@ -16,7 +18,7 @@ public class User {
     private Integer id;
 
     @Column(nullable = false)
-    @Size(min = 4, max = 16, message = "От 4 до 16 символов")
+    @Size(min = 4, max = 27, message = "От 4 до 27 символов")
     private String username;
 
     @Column(nullable = false)
@@ -40,32 +42,30 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    @Column(nullable = false)
     private String image;
-
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "author")
+    @JsonBackReference
     private List<Ad> ads;
 
     @OneToMany(mappedBy = "author")
+    @JsonBackReference
     private List<Comment> comments;
 
-    public User() {
-
-    }
-
-    public User(List<Comment> comments, List<Ad> ads, String image, Role role, String phone, String lastName, String firstName, String password, String username, Integer id) {
-        this.comments = comments;
-        this.ads = ads;
-        this.image = image;
-        this.role = role;
-        this.phone = phone;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.password = password;
-        this.username = username;
+    public User(Integer id, String username, String password, String firstName, String lastName,
+                String phone, Role role, String image, List<Ad> ads, List<Comment> comments) {
         this.id = id;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.role = role;
+        this.image = image;
+        this.ads = ads;
+        this.comments = comments;
     }
+
+    public User(){}
 
     public Integer getId() {
         return id;
@@ -145,5 +145,21 @@ public class User {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", role=" + role +
+                ", image='" + image + '\'' +
+                ", ads=" + ads +
+                ", comments=" + comments +
+                '}';
     }
 }

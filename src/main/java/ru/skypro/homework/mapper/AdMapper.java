@@ -1,36 +1,61 @@
 package ru.skypro.homework.mapper;
 
-import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.User;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AdMapper {
 
-    AdMapper INSTANCE = Mappers.getMapper(AdMapper.class);
+//    @Mapping(source = "id", target = "pk")
+//    @Mapping(source = "user.id", target = "author")
+    default AdDto toAdDto(Ad ad){
+        AdDto adDto = new AdDto();
+        adDto.setPk(ad.getId());
+        adDto.setTitle(ad.getTitle());
+        adDto.setAuthor(ad.getUser().getId());
+        adDto.setPrice(ad.getPrice());
+        if (ad.getImage() != null) {
+            adDto.setImage(ad.getImage());
+        }
+        return adDto;
+    }
 
-    @Mapping(target = "author", source = "user.id")
-    @Mapping(target = "pk", source = "id")
-    AdDto toDto(Ad ad);
+    default AdsDto toAdsDto(List<Ad> ads) {
+        AdsDto adsDto = new AdsDto();
+        adsDto.setCount(ads.size());
+        adsDto.setResults(ads.stream()
+                .map(this::toAdDto)
+                .toList());
+        return adsDto;
+    }
 
-    @Mapping(target = "title", source = "title")
-    @Mapping(target = "description", source = "description")
-    @Mapping(target = "price", source = "price")
-    Ad toEntity(CreateOrUpdateAd createOrUpdateAd, @Context User user);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "commentsList", ignore = true)
+    @Mapping(source = "title", target = "title")
+    @Mapping(source = "price", target = "price")
+    @Mapping(source = "description", target = "description")
+    @Mapping(target = "image", ignore = true)
+    Ad toAd(CreateOrUpdateAd createOrUpdateAd);
 
-    List<AdDto> toDtoList(List<Ad> ads);
-
-    @Mapping(target = "pk", source = "id")
-    @Mapping(target = "authorFirstName", source = "user.firstName")
-    @Mapping(target = "authorLastName", source = "user.lastName")
+    @Mapping(source = "user.id", target = "pk")
+    @Mapping(source = "user.firstName", target = "authorFirstName")
+    @Mapping(source = "user.lastName", target = "authorLastName")
+    @Mapping(source = "ad.description", target = "description")
+    @Mapping(source = "user.username", target = "email")
+    @Mapping(source = "user.image", target = "image")
+    @Mapping(source = "user.phone", target = "phone")
+    @Mapping(source = "ad.price", target = "price")
+    @Mapping(source = "ad.title", target = "title")
     ExtendedAd toExtendedAd(Ad ad);
 
 }
