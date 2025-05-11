@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,12 +16,11 @@ import ru.skypro.homework.exception.UnauthorizedAccesException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.impl.AdServiceImpl;
-import ru.skypro.homework.service.impl.FileStorageService;
+import ru.skypro.homework.service.impl.AvatarServiceImpl;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/ads")
@@ -28,13 +28,13 @@ import java.util.Map;
 public class AdController {
 
     private final AdServiceImpl adService;
-    private final FileStorageService fileStorageService;
     private final AdRepository adRepository;
+    private final AvatarServiceImpl avatarServiceImpl;
 
-    public AdController(AdServiceImpl adService, FileStorageService fileStorageService, AdRepository adRepository) {
+    public AdController(AdServiceImpl adService, AdRepository adRepository, AvatarServiceImpl avatarServiceImpl) {
         this.adService = adService;
-        this.fileStorageService = fileStorageService;
         this.adRepository = adRepository;
+        this.avatarServiceImpl = avatarServiceImpl;
     }
 
     @GetMapping
@@ -53,13 +53,14 @@ public class AdController {
         }
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<?> getAdById(@PathVariable Integer id) {
         try {
-            ExtendedAd extendedAd = adService.getAddById(id);
+            ExtendedAd extendedAd = adService.getAdById(id);
             return ResponseEntity.ok(extendedAd);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Ad not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (UnauthorizedAccesException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -100,7 +101,7 @@ public class AdController {
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateAdImage(@PathVariable Integer id,
                                            @RequestPart("image") MultipartFile image) throws IOException {
-        fileStorageService.uploadImage(id, image);
+        avatarServiceImpl.uploadAdAvatar(id, image);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

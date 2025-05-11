@@ -15,7 +15,6 @@ import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 
@@ -28,15 +27,15 @@ public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
     private final AdMapper adMapper;
     private final UserRepository userRepository;
-    private final FileStorageService fileStorageService;
-    private final ImageRepository imageRepository;
+    private final AvatarServiceImpl avatarServiceImpl;
 
-    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper, UserRepository userRepository, FileStorageService fileStorageService, ImageRepository imageRepository) {
+    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper,
+                         UserRepository userRepository,
+                         AvatarServiceImpl avatarServiceImpl) {
         this.adRepository = adRepository;
         this.adMapper = adMapper;
         this.userRepository = userRepository;
-        this.fileStorageService = fileStorageService;
-        this.imageRepository = imageRepository;
+        this.avatarServiceImpl = avatarServiceImpl;
     }
 
     @Override
@@ -51,24 +50,22 @@ public class AdServiceImpl implements AdService {
         Ad ad = adMapper.toAd(createOrUpdateAd);
         ad.setUser(user);
         adRepository.save(ad);
-
         if (image != null && !image.isEmpty()) {
-            fileStorageService.uploadImage(ad.getId(), image);
+            avatarServiceImpl.uploadAdAvatar(ad.getId(), image);
         }
+
         return ad;
     }
 
     @Override
-    public ExtendedAd getAddById(Integer id) {
+    public ExtendedAd getAdById(Integer id) {
         Ad ad = adRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
-
         if (!isUserAuthorized(ad.getUser())) {
             throw new AuthenticationException();
         }
-        User author = ad.getUser();
-
         return adMapper.toExtendedAd(ad);
     }
+
 
     @Override
     public void deleteAddById(Integer id) {

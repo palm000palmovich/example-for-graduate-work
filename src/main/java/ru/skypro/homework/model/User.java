@@ -22,15 +22,12 @@ public class User {
     private String username;
 
     @Column(nullable = false)
-    @Size(min = 8, max = 16, message = "От 8 до 16 символов")
     private String password;
 
     @Column(nullable = false)
-    @Size(min = 3, max = 16, message = "От 3 до 16 символов")
     private String firstName;
 
     @Column(nullable = false)
-    @Size(min = 3, max = 16, message = "От 3 до 16 символов")
     private String lastName;
 
     @Column(nullable = false)
@@ -43,7 +40,8 @@ public class User {
     private Role role;
 
     private String image;
-    @OneToMany(mappedBy = "user")
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Ad> ads;
 
@@ -147,19 +145,19 @@ public class User {
         this.comments = comments;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phone='" + phone + '\'' +
-                ", role=" + role +
-                ", image='" + image + '\'' +
-                ", ads=" + ads +
-                ", comments=" + comments +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", username='" + username + '\'' +
+//                ", password='" + password + '\'' +
+//                ", firstName='" + firstName + '\'' +
+//                ", lastName='" + lastName + '\'' +
+//                ", phone='" + phone + '\'' +
+//                ", role=" + role +
+//                ", image='" + image + '\'' +
+//                ", ads=" + ads +
+//                ", comments=" + comments +
+//                '}';
+//    }
 }

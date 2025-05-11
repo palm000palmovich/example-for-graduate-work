@@ -3,16 +3,13 @@ package ru.skypro.homework.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.exception.AvatarNotFoundException;
-import ru.skypro.homework.model.UserAvatar;
+import ru.skypro.homework.model.Avatar;
 import ru.skypro.homework.service.impl.AvatarServiceImpl;
 
 @RestController
@@ -27,18 +24,18 @@ public class ImageController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<byte[]> getUsersAvatar(@PathVariable("id") Integer id){
-        UserAvatar userAvatar = new UserAvatar();
+        Avatar avatar = new Avatar();
 
         try{
-            userAvatar = avatarService.getAvaById(id);
+            avatar = avatarService.getAvaById(id);
         } catch(AvatarNotFoundException e){
             logger.error("Avatar with id " + id + " is not found.");
         }
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf(userAvatar.getMediaType()));
-        headers.setContentLength(userAvatar.getFileSize());
+        headers.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
+        headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 
-        return new ResponseEntity<>(userAvatar.getData(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(avatar.getData(), headers, HttpStatus.OK);
     }
 }

@@ -101,4 +101,17 @@ public class Ad {
     public void setUser(User user) {
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        return "Ad{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", image='" + image + '\'' +
+                ", commentsList=" + commentsList +
+                ", user=" + user +
+                '}';
+    }
 }

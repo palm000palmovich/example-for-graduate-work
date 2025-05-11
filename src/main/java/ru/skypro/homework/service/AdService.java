@@ -14,7 +14,7 @@ public interface AdService {
 
     Ad createAdd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image) throws IOException;
 
-    ExtendedAd getAddById(Integer id);
+    ExtendedAd getAdById(Integer id);
 
     void deleteAddById(Integer id);
 

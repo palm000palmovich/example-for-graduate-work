@@ -1,11 +1,10 @@
 package ru.skypro.homework.model;
 
 import javax.persistence.*;
-import java.util.Arrays;
 
 @Entity
 @Table(name = "user_avatars")
-public class UserAvatar {
+public class Avatar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -19,10 +18,20 @@ public class UserAvatar {
     private byte[] data;
     @OneToOne
     private User user;
+    @OneToOne
+    private Ad ad;
 
 
     public Integer getId() {
         return id;
+    }
+
+    public Ad getAd() {
+        return ad;
+    }
+
+    public void setAd(Ad ad) {
+        this.ad = ad;
     }
 
     public void setId(Integer id) {
@@ -71,7 +80,7 @@ public class UserAvatar {
 
     @Override
     public String toString() {
-        return "UserAvatar{" +
+        return "Avatar{" +
                 "id=" + id +
                 ", filePath='" + filePath + '\'' +
                 ", fileSize=" + fileSize +

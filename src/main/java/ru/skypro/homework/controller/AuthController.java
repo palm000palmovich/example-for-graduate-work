@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 
 import javax.validation.Valid;
 
+@CrossOrigin("localhost:3000")
 @RestController
 @Validated
 public class AuthController {
