@@ -30,4 +30,12 @@ public class NewPassword {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
+
+    @Override
+    public String toString() {
+        return "NewPassword{" +
+                "currentPassword='" + currentPassword + '\'' +
+                ", newPassword='" + newPassword + '\'' +
+                '}';
+    }
 }
