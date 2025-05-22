@@ -2,21 +2,17 @@ package ru.skypro.homework.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.Ad;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AdMapper {
 
-//    @Mapping(source = "id", target = "pk")
-//    @Mapping(source = "user.id", target = "author")
     default AdDto toAdDto(Ad ad){
         AdDto adDto = new AdDto();
         adDto.setPk(ad.getId());
@@ -52,7 +48,7 @@ public interface AdMapper {
     @Mapping(source = "user.lastName", target = "authorLastName")
     @Mapping(source = "ad.description", target = "description")
     @Mapping(source = "user.username", target = "email")
-    @Mapping(source = "user.image", target = "image")
+    @Mapping(source = "ad.image", target = "image")
     @Mapping(source = "user.phone", target = "phone")
     @Mapping(source = "ad.price", target = "price")
     @Mapping(source = "ad.title", target = "title")

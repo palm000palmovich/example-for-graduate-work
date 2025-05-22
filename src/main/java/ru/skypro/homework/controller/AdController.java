@@ -19,6 +19,7 @@ import ru.skypro.homework.service.impl.AdServiceImpl;
 import ru.skypro.homework.service.impl.AvatarServiceImpl;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TableGenerator;
 import javax.validation.Valid;
 import java.io.IOException;
 

@@ -3,7 +3,7 @@ package ru.skypro.homework.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user_avatars")
+@Table(name = "avatars")
 public class Avatar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,9 +16,12 @@ public class Avatar {
     private String mediaType;
     @Lob
     private byte[] data;
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private User user;
-    @OneToOne
+
+
+    @OneToOne(orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Ad ad;
 
 

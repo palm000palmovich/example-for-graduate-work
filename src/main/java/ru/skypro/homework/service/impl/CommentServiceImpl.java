@@ -14,6 +14,7 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -37,7 +38,8 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public CommentsDTO getComments(Integer adId) {
-        return new CommentsDTO();
+        List<Comment> comments = commentRepository.findByAdId(adId);
+        return commentMapper.toCommentsDTO(comments);
     }
 
 

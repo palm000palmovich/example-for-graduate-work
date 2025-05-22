@@ -15,10 +15,12 @@ import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 
@@ -59,29 +61,49 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public ExtendedAd getAdById(Integer id) {
-        Ad ad = adRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
-        if (!isUserAuthorized(ad.getUser())) {
-            throw new AuthenticationException();
-        }
+        Ad ad = adRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         return adMapper.toExtendedAd(ad);
     }
 
-
+    @Transactional
     @Override
     public void deleteAddById(Integer id) {
-        Ad ad = adRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+        System.out.println("Start deleteAdById with ID: " + id);
+        Ad ad = adRepository.findById(id).orElseThrow(() -> {
+            System.out.println("Ad not found, throwing EntityNotFoundException");
+            return new EntityNotFoundException();
+        });
+        System.out.println("Ad found: " + ad);
+
         if (!isUserAuthorized(ad.getUser())) {
+            System.out.println("User is not authorized, throwing UnauthorizedAccessException");
             throw new UnauthorizedAccesException();
         }
         if (!hasPermissionToDelete(ad)) {
+            System.out.println("User lacks permission, throwing ForbiddenAccessException");
             throw new ForbiddenAccesException();
         }
-        adRepository.deleteById(id);
+
+        System.out.println("Deleting ad: " + ad);
+        adRepository.delete(ad);
+        System.out.println("Ad deleted successfully");
     }
+//    @Transactional
+//    @Override
+//    public void deleteAddById(Integer id) {
+//        Ad ad = adRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+//        if (!isUserAuthorized(ad.getUser())) {
+//            throw new UnauthorizedAccesException();
+//        }
+//        if (!hasPermissionToDelete(ad)) {
+//            throw new ForbiddenAccesException();
+//        }
+//        adRepository.delete(ad);
+//    }
 
     @Override
     public AdDto updateAdById(Integer id, CreateOrUpdateAd createOrUpdateAd) {
-        Ad ad = adRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+        Ad ad = adRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         if (!hasPermissionToUpdate(ad)) {
             throw new ForbiddenAccesException();
         }
@@ -107,11 +129,16 @@ public class AdServiceImpl implements AdService {
 
     private boolean hasPermissionToDelete(Ad ad) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null || !authentication.isAuthenticated()) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return false;
         }
         String currentUsername = authentication.getName();
-        return ad.getUser().getUsername().equals(currentUsername);
+        User adUser = ad.getUser();
+
+        if (adUser == null || adUser.getUsername() == null) {
+            return false;
+        }
+        return adUser.getUsername().equals(currentUsername);
     }
 
     private boolean hasPermissionToUpdate(Ad ad) {

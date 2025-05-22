@@ -1,6 +1,7 @@
 package ru.skypro.homework.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
@@ -41,11 +42,11 @@ public class User {
 
     private String image;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonBackReference
+    @OneToMany(orphanRemoval = true,mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Ad> ads;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Comment> comments;
 
@@ -145,19 +146,13 @@ public class User {
         this.comments = comments;
     }
 
-//    @Override
-//    public String toString() {
-//        return "User{" +
-//                "id=" + id +
-//                ", username='" + username + '\'' +
-//                ", password='" + password + '\'' +
-//                ", firstName='" + firstName + '\'' +
-//                ", lastName='" + lastName + '\'' +
-//                ", phone='" + phone + '\'' +
-//                ", role=" + role +
-//                ", image='" + image + '\'' +
-//                ", ads=" + ads +
-//                ", comments=" + comments +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + firstName + '\'' +
+                ", email='" + username + '\'' +
+                ", ads=" + (ads != null ? ads.size() : "null") + // Отображаем только количество или пропускаем
+                '}';
+    }
 }

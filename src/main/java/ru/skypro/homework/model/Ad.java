@@ -1,6 +1,7 @@
 package ru.skypro.homework.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -26,7 +27,8 @@ public class Ad {
 
     private String image;
 
-    @OneToMany(mappedBy = "ad")
+    @OneToMany(orphanRemoval = true,cascade = CascadeType.ALL,mappedBy = "ad")
+    @JsonManagedReference
     private List<Comment> commentsList;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -108,10 +110,7 @@ public class Ad {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", price=" + price +
-                ", image='" + image + '\'' +
-                ", commentsList=" + commentsList +
-                ", user=" + user +
+                ", user=" + (user != null ? user.getId() : "null") + // Используем только id или другой ключевой атрибут
                 '}';
     }
 }
